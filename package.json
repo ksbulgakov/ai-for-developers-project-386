@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsp compile tsp",
     "watch": "tsp compile tsp --watch",
-    "lint": "redocly lint tsp-output/@typespec/openapi3/openapi.yaml"
+    "lint": "redocly lint tsp-output/openapi.yaml"
   },
   "devDependencies": {
     "@redocly/cli": "^1.25.0",
