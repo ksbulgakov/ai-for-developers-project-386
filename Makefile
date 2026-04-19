@@ -1,7 +1,7 @@
 .PHONY: install install-root install-frontend \
         build build-tsp build-frontend \
         dev lint lint-tsp lint-frontend \
-        watch preview clean
+        watch mock preview clean
 
 install: install-root install-frontend
 
@@ -21,6 +21,9 @@ build-frontend:
 
 watch:
 	npm run watch
+
+mock:
+	npm run mock
 
 dev:
 	npm run dev --prefix frontend
