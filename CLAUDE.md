@@ -1,14 +1,64 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Этот файл содержит инструкции для Claude Code (claude.ai/code) при работе с кодом в этом репозитории.
 
-## Project Overview
+## Обзор проекта
 
-This is a [Hexlet](https://hexlet.io) educational project repository. It currently serves as the starting scaffold for a course project — the actual project content will be added as the course progresses.
+Учебный проект Hexlet (скаффолд для курса). В репозитории две части:
 
-## CI/CD
+1. **Контракт API в TypeSpec** — `tsp/`, единственный источник правды для API.
+2. **React-фронтенд** — `frontend/` (Vite + TS + Mantine v9).
 
-- Automated tests run via GitHub Actions on every push (`.github/workflows/hexlet-check.yml`)
-- **Do not delete, edit, or rename** `hexlet-check.yml` — it is required by the Hexlet platform
-- Tests require a `HEXLET_ID` secret configured in the repository settings
-- The repository must not be renamed, as the workflow is tied to it
+Домен: упрощённый сервис бронирования времени (по мотивам Cal.com) с одним заранее заданным владельцем календаря и безымянными гостями.
+
+## Архитектура
+
+### TypeSpec → OpenAPI → сгенерированный клиент
+
+```
+tsp/*.tsp  ──tsp compile──▶  tsp-output/openapi.yaml  ──openapi-typescript──▶  frontend/src/api/schema.d.ts
+                                        │
+                                        └─── Prism mock (:4010)
+```
+
+- `tsp/main.tsp` собирает вместе `models.tsp` (доменные модели), `errors.tsp` (ошибки в формате RFC 7807 Problem Details), `admin.tsp` (`/api/v1/admin/*`), `public.tsp` (`/api/v1/*`).
+- `tsp-output/openapi.yaml` генерируется и не коммитится. Регенерировать после любой правки `.tsp`.
+- Фронтенд использует сгенерированные типы через `openapi-fetch` — **нельзя писать API-клиент руками или дублировать доменные типы**. Использовать `EventType`, `EventTypeCreate` и прочие из `frontend/src/api/client.ts`, где они реэкспортятся из сгенерированной схемы.
+- После правок TypeSpec: `make build-tsp && make generate-api` — иначе типы на фронте устареют.
+
+### Mock API
+
+Prism отдаёт OpenAPI-спеку как mock на `http://127.0.0.1:4010`. Vite dev проксирует туда `/api/*` (`frontend/vite.config.ts:8-13`), поэтому фронтенд вызывает `/api/v1/admin/event-types` и прозрачно попадает в Prism. Prism запускается с `--dynamic`, чтобы ответы варьировались на каждый запрос; при этом он **stateless** — POST и DELETE не сохраняют состояние, это надо учитывать при ручной проверке UI.
+
+## Команды (через Makefile)
+
+Makefile — основная точка входа; отдельные `npm run *` скрипты лежат в корневом `package.json` (инструменты TypeSpec) и в `frontend/package.json` (Vite/React).
+
+| Команда | Что делает |
+|---|---|
+| `make install` | Устанавливает зависимости корня и фронтенда |
+| `make build` | Компилирует TypeSpec + собирает прод-бандл фронтенда |
+| `make build-tsp` | Компилирует TypeSpec → `tsp-output/openapi.yaml` |
+| `make generate-api` | Регенерирует `frontend/src/api/schema.d.ts` из `tsp-output/openapi.yaml` |
+| `make watch` | `tsp compile --watch` |
+| `make mock` | Запускает Prism-mock на :4010 (нужен `tsp-output/`) |
+| `make dev` | Запускает Vite dev на :5173 |
+| `make start` | Параллельно поднимает `mock` и `dev` (`make -j2`) |
+| `make lint` | Redocly lint (OpenAPI) + ESLint (фронтенд) |
+| `make preview` | Превью собранного бандла фронтенда |
+| `make clean` | Удаляет `tsp-output/` и `frontend/dist/` |
+
+Типичный цикл разработки: `make install` → `make build-tsp` → `make generate-api` → `make start`.
+
+Отдельного таргета для тестов нет — Hexlet CI (`.github/workflows/hexlet-check.yml`) запускает свою проверку через `hexlet/project-action`.
+
+## Ограничения
+
+- **Не удаляй, не редактируй и не переименовывай** `.github/workflows/hexlet-check.yml` — этого требует платформа Hexlet. Репозиторий нельзя переименовывать, CI привязан к его имени. Секрет `HEXLET_ID` сконфигурирован в настройках репозитория.
+- `frontend/.npmrc` задаёт `legacy-peer-deps=true`. Это обязательно: `openapi-typescript@7.x` peer-депендит на `typescript@^5.x`, а фронтенд использует `typescript ~6.0.2`. Не удаляй файл — иначе установка зависимостей упадёт.
+- На фронтенде только Mantine v9 — иконочной библиотеки нет. Использовать текстовый «×» вместо того, чтобы тянуть `@tabler/icons-react`, если иконки не входят в задачу явно.
+- Валидация на фронте должна зеркалить ограничения TypeSpec из `tsp/models.tsp` (например, `durationMinutes`: 5–480, кратно 5). TypeSpec — источник правды; формы на фронте дублируют правила ради UX.
+
+## Роутинг
+
+`frontend/src/main.tsx` оборачивает приложение в `BrowserRouter` + `MantineProvider` + `ModalsProvider`. Маршруты объявлены в `frontend/src/App.tsx`. `/` редиректит на `/event-types`.
