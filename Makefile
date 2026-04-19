@@ -1,7 +1,8 @@
 .PHONY: install install-root install-frontend \
         build build-tsp build-frontend \
         dev lint lint-tsp lint-frontend \
-        watch mock preview clean
+        watch mock preview clean \
+        generate-api start
 
 install: install-root install-frontend
 
@@ -27,6 +28,12 @@ mock:
 
 dev:
 	npm run dev --prefix frontend
+
+generate-api:
+	npm run generate:api --prefix frontend
+
+start:
+	$(MAKE) -j2 mock dev
 
 preview:
 	npm run preview --prefix frontend
