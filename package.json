@@ -1,0 +1,18 @@
+{
+  "name": "booking-service-typespec",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TypeSpec API contract for the booking service (Cal.com-like).",
+  "scripts": {
+    "build": "tsp compile tsp",
+    "watch": "tsp compile tsp --watch",
+    "lint": "redocly lint tsp-output/@typespec/openapi3/openapi.yaml"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^1.25.0",
+    "@typespec/compiler": "^1.0.0",
+    "@typespec/http": "^1.0.0",
+    "@typespec/openapi": "^1.0.0",
+    "@typespec/openapi3": "^1.0.0"
+  }
+}
