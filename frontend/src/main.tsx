@@ -10,7 +10,7 @@ import App from './App.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <MantineProvider>
+      <MantineProvider defaultColorScheme="dark">
         <ModalsProvider>
           <App />
         </ModalsProvider>
