@@ -12,10 +12,7 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { apiClient, type EventType } from './api/client'
-
-function formatDuration(minutes: number): string {
-  return `${minutes} мин`
-}
+import { formatDuration } from './utils/format'
 
 function ChooseEventType() {
   const navigate = useNavigate()

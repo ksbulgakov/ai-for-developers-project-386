@@ -14,10 +14,7 @@ import {
 import { modals } from '@mantine/modals'
 import { apiClient, type EventType } from './api/client'
 import EventTypeForm from './EventTypeForm'
-
-function formatDuration(minutes: number): string {
-  return `${minutes} мин`
-}
+import { formatDuration } from './utils/format'
 
 function EvntTypesList() {
   const [events, setEvents] = useState<EventType[]>([])
