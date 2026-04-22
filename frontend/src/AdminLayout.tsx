@@ -1,17 +1,22 @@
 import { AppShell, NavLink } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 
 const links = [
-  { to: '/event-types', label: 'События' },
-  { to: '/bookings', label: 'Бронирования' },
-  { to: '/choose-event-type', label: 'Забронировать встречу' },
+  { to: '/event-types', label: 'События', icon: '📅' },
+  { to: '/bookings', label: 'Бронирования', icon: '📋' },
+  { to: '/choose-event-type', label: 'Забронировать встречу', icon: '➕' },
 ]
 
 function AdminLayout() {
   const { pathname } = useLocation()
+  const isCompact = useMediaQuery('(max-width: 48em)') ?? false
 
   return (
-    <AppShell navbar={{ width: 240, breakpoint: 'sm' }} padding="md">
+    <AppShell
+      navbar={{ width: isCompact ? 80 : 240, breakpoint: 0 }}
+      padding="md"
+    >
       <AppShell.Navbar
         p="md"
         pt="calc(var(--mantine-spacing-md) + var(--mantine-spacing-xl) + var(--mantine-spacing-xs))"
@@ -21,7 +26,23 @@ function AdminLayout() {
             key={link.to}
             component={Link}
             to={link.to}
-            label={link.label}
+            label={
+              isCompact ? (
+                <span
+                  style={{
+                    fontSize: '1.5rem',
+                    lineHeight: 1,
+                    display: 'block',
+                    textAlign: 'center',
+                  }}
+                >
+                  {link.icon}
+                </span>
+              ) : (
+                link.label
+              )
+            }
+            aria-label={link.label}
             active={pathname === link.to || pathname.startsWith(`${link.to}/`)}
           />
         ))}
