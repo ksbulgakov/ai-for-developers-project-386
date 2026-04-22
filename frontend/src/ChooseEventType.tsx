@@ -45,7 +45,7 @@ function ChooseEventType() {
   }
 
   return (
-    <Container size="sm" py="xl">
+    <Container w="100%" py="xl">
       <Title order={1} mb="lg">
         Выбор События
       </Title>
