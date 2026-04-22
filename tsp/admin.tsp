@@ -67,5 +67,11 @@ namespace Admin {
       @query
       to?: utcDateTime,
     ): Booking[] | BadRequestError;
+
+    @operationId("adminDeleteBooking")
+    @summary("Удалить бронирование")
+    @doc("Удалить бронирование по идентификатору.")
+    @delete
+    op remove(@path id: string): NoContentResponse | NotFoundError;
   }
 }

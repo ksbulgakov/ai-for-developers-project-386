@@ -26,6 +26,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/bookings/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Удалить бронирование
+         * @description Удалить бронирование по идентификатору.
+         */
+        delete: operations["adminDeleteBooking"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/event-types": {
         parameters: {
             query?: never;
@@ -345,6 +365,35 @@ export interface operations {
             };
             /** @description Некорректный запрос: нарушен формат email, длительность вне допустимого диапазона и т.п. */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    adminDeleteBooking: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description There is no content to send for this request, but the headers may be useful. */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Ресурс не найден: отсутствует тип события или бронирование с указанным id. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

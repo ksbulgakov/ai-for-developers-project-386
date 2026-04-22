@@ -27,7 +27,7 @@ import {
   type Problem,
   type Slot,
 } from './api/client'
-import { formatDuration } from './utils/format'
+import { formatDateTime, formatDuration } from './utils/format'
 
 type BookingFormValues = {
   guestName: string
@@ -223,7 +223,7 @@ function ChooseSlot() {
           withCloseButton
           onClose={() => setSuccessInfo(null)}
         >
-          {`${dayjs(successInfo.start).format('D MMMM YYYY, HH:mm')} — подтверждение отправлено на ${successInfo.guestEmail}`}
+          {`${formatDateTime(successInfo.start)} — подтверждение отправлено на ${successInfo.guestEmail}`}
         </Alert>
       )}
 
