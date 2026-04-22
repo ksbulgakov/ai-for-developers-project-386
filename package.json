@@ -6,13 +6,21 @@
   "scripts": {
     "build": "tsp compile tsp",
     "watch": "tsp compile tsp --watch",
-    "lint": "redocly lint tsp-output/@typespec/openapi3/openapi.yaml"
+    "lint": "redocly lint tsp-output/openapi.yaml",
+    "mock": "node node_modules/@stoplight/prism-cli/dist/index.js mock --dynamic tsp-output/openapi.yaml"
   },
   "devDependencies": {
     "@redocly/cli": "^1.25.0",
+    "@stoplight/prism-cli": "5.14.2",
     "@typespec/compiler": "^1.0.0",
     "@typespec/http": "^1.0.0",
     "@typespec/openapi": "^1.0.0",
     "@typespec/openapi3": "^1.0.0"
+  },
+  "overrides": {
+    "@stoplight/prism-cli": "5.14.2",
+    "@stoplight/prism-core": "5.8.0",
+    "@stoplight/prism-http": "5.12.0",
+    "@stoplight/prism-http-server": "5.12.2"
   }
 }
