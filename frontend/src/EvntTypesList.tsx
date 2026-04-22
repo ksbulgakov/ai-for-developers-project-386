@@ -65,7 +65,7 @@ function EvntTypesList() {
   }
 
   return (
-    <Container size="sm" py="xl">
+    <Container w="100%" py="xl">
       <Group justify="space-between" mb="lg">
         <Title order={1}>События</Title>
         <Button onClick={openCreateModal}>Создать</Button>
