@@ -2,7 +2,8 @@
         build build-tsp build-frontend \
         dev lint lint-tsp lint-frontend \
         watch mock preview clean \
-        generate-api start
+        generate-api start \
+        backend-deps generate-backend backend start-go
 
 install: install-root install-frontend
 
@@ -47,4 +48,16 @@ lint-frontend:
 	npm run lint --prefix frontend
 
 clean:
-	rm -rf tsp-output frontend/dist
+	rm -rf tsp-output frontend/dist backend/internal/api/api.gen.go
+
+backend-deps:
+	cd backend && go mod download
+
+generate-backend: build-tsp backend-deps
+	cd backend && go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen -config oapi-codegen.yaml ../tsp-output/openapi.yaml
+
+backend: generate-backend
+	cd backend && go run ./cmd/server
+
+start-go:
+	VITE_API_TARGET=http://127.0.0.1:8080 $(MAKE) -j2 backend dev
