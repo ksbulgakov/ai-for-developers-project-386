@@ -71,12 +71,17 @@ Makefile — основная точка входа; отдельные `npm run
 | `make generate-backend` | `build-tsp` + регенерация `backend/internal/api/api.gen.go` |
 | `make backend` | Регенерирует код и поднимает Go-сервер на :8080 |
 | `make start-go` | Параллельно поднимает `backend` и `dev` с `VITE_API_TARGET=http://127.0.0.1:8080` |
+| `make test-e2e-install` | Ставит Chromium для Playwright |
+| `make test-e2e` | Регенерирует код и гоняет Playwright e2e-сьюты |
+| `make test-e2e-ui` | То же, но в UI-режиме Playwright |
 
 Типичные циклы разработки:
 - с Prism-моком: `make install` → `make build-tsp` → `make generate-api` → `make start`.
 - с Go-бэкендом: `make install` → `make backend-deps` → `make generate-backend` → `make generate-api` → `make start-go`.
 
-Отдельного таргета для тестов нет — Hexlet CI (`.github/workflows/hexlet-check.yml`) запускает свою проверку через `hexlet/project-action`.
+E2E-тесты (`tests/e2e/*`, Playwright) поднимают настоящий Go-бэкенд через `webServer` в `playwright.config.ts`. Запуск только через `make test-e2e` — прямой `npx playwright test` упадёт без свежесгенерированного `api.gen.go`. Локально используется `reuseExistingServer`, поэтому in-memory состояние живёт между прогонами. Фикстура `api` в `tests/e2e/fixtures.ts` чистит свои event-types/bookings по id, плюс `safetyNet` добивает всё с префиксом `e2e-`; если видите `ConflictError` на слотах — перезапустите бэкенд руками.
+
+Hexlet CI (`.github/workflows/hexlet-check.yml`) запускает свою проверку через `hexlet/project-action`.
 
 ## Ограничения
 

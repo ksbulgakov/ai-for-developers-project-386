@@ -73,6 +73,7 @@ function ChooseEventType() {
           <UnstyledButton
             key={event.id}
             onClick={() => handleSelect(event.id)}
+            data-testid="choose-event-type-card"
           >
             <Paper p="md" withBorder radius="md">
               <Stack gap={4}>

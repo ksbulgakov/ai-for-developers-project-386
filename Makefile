@@ -3,7 +3,8 @@
         dev lint lint-tsp lint-frontend \
         watch mock preview clean \
         generate-api start \
-        backend-deps generate-backend backend start-go
+        backend-deps generate-backend backend start-go \
+        test-e2e-install test-e2e test-e2e-ui
 
 install: install-root install-frontend
 
@@ -61,3 +62,12 @@ backend: generate-backend
 
 start-go:
 	VITE_API_TARGET=http://127.0.0.1:8080 $(MAKE) -j2 backend dev
+
+test-e2e-install:
+	npx playwright install chromium
+
+test-e2e: generate-backend generate-api test-e2e-install
+	npx playwright test
+
+test-e2e-ui: generate-backend generate-api test-e2e-install
+	npx playwright test --ui

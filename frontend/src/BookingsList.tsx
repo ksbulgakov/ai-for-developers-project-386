@@ -159,7 +159,15 @@ function BookingsList() {
       {!loading && (
         <Stack gap="sm" w="100%">
           {bookings.map((booking) => (
-            <Paper key={booking.id} p="md" withBorder radius="md" w="100%">
+            <Paper
+              key={booking.id}
+              p="md"
+              withBorder
+              radius="md"
+              w="100%"
+              data-testid="booking-row"
+              data-id={booking.id}
+            >
               <Group justify="space-between" wrap="nowrap">
                 <UnstyledButton
                   onClick={() => openBookingModal(booking)}

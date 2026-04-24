@@ -75,7 +75,10 @@ function EventTypeForm({ onCreated }: Props) {
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
+    <form
+      onSubmit={form.onSubmit(handleSubmit)}
+      data-testid="event-type-form"
+    >
       <Stack>
         <TextInput
           label="Название"
@@ -112,7 +115,11 @@ function EventTypeForm({ onCreated }: Props) {
           >
             Отмена
           </Button>
-          <Button type="submit" loading={submitting}>
+          <Button
+            type="submit"
+            loading={submitting}
+            data-testid="event-type-submit"
+          >
             Создать
           </Button>
         </Group>

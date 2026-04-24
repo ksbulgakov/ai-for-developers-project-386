@@ -7,9 +7,13 @@
     "build": "tsp compile tsp",
     "watch": "tsp compile tsp --watch",
     "lint": "redocly lint tsp-output/openapi.yaml",
-    "mock": "node node_modules/@stoplight/prism-cli/dist/index.js mock --dynamic tsp-output/openapi.yaml"
+    "mock": "node node_modules/@stoplight/prism-cli/dist/index.js mock --dynamic tsp-output/openapi.yaml",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:install": "playwright install chromium"
   },
   "devDependencies": {
+    "@playwright/test": "^1.50.0",
     "@redocly/cli": "^1.25.0",
     "@stoplight/prism-cli": "5.14.2",
     "@typespec/compiler": "^1.0.0",

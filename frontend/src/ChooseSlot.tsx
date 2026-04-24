@@ -222,6 +222,7 @@ function ChooseSlot() {
           title="Бронирование создано"
           withCloseButton
           onClose={() => setSuccessInfo(null)}
+          data-testid="booking-success"
         >
           {`${formatDateTime(successInfo.start)} — подтверждение отправлено на ${successInfo.guestEmail}`}
         </Alert>
@@ -259,6 +260,7 @@ function ChooseSlot() {
                   onClick: () => {
                     if (inWindow) handleDayClick(date)
                   },
+                  'data-date': d.format('YYYY-MM-DD'),
                 }
               }}
             />
@@ -297,12 +299,14 @@ function ChooseSlot() {
                 )}
 
                 {!slotsLoading && !slotsError && slots.length > 0 && (
-                  <Stack gap="xs">
+                  <Stack gap="xs" data-testid="slots">
                     {slots.map((slot) => (
                       <Button
                         key={slot.start}
                         variant="light"
                         onClick={() => handleSlotClick(slot)}
+                        data-testid="slot-button"
+                        data-time={slot.start}
                       >
                         {dayjs(slot.start).format('HH:mm')}
                       </Button>
@@ -325,7 +329,10 @@ function ChooseSlot() {
         }
         centered
       >
-        <form onSubmit={form.onSubmit(handleSubmit)}>
+        <form
+          onSubmit={form.onSubmit(handleSubmit)}
+          data-testid="booking-form"
+        >
           <Stack>
             <TextInput
               label="Имя"
@@ -360,7 +367,11 @@ function ChooseSlot() {
               >
                 Отмена
               </Button>
-              <Button type="submit" loading={submitting}>
+              <Button
+                type="submit"
+                loading={submitting}
+                data-testid="booking-submit"
+              >
                 Забронировать
               </Button>
             </Group>

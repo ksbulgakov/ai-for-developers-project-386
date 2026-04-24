@@ -68,7 +68,9 @@ function EvntTypesList() {
     <Container w="100%" py="xl">
       <Group justify="space-between" mb="lg">
         <Title order={1}>События</Title>
-        <Button onClick={openCreateModal}>Создать</Button>
+        <Button onClick={openCreateModal} data-testid="event-types-create">
+          Создать
+        </Button>
       </Group>
 
       {loading && (
@@ -91,7 +93,13 @@ function EvntTypesList() {
 
       <Stack gap="sm">
         {events.map((event) => (
-          <Paper key={event.id} p="md" withBorder radius="md">
+          <Paper
+            key={event.id}
+            p="md"
+            withBorder
+            radius="md"
+            data-testid="event-type-card"
+          >
             <Group justify="space-between" wrap="nowrap">
               <Stack gap={4}>
                 <Text fw={500}>{event.name}</Text>
@@ -103,6 +111,7 @@ function EvntTypesList() {
                 variant="subtle"
                 color="red"
                 aria-label="Удалить"
+                data-testid="event-type-delete"
                 onClick={() => handleDelete(event.id)}
               >
                 ×
