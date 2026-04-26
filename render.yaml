@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: booking-app
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeploy: true
+    healthCheckPath: /api/v1/event-types
+    envVars:
+      - key: GIN_MODE
+        value: release

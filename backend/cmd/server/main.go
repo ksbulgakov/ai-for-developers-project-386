@@ -15,6 +15,7 @@ import (
 	"github.com/konstantin/booking-backend/internal/api"
 	"github.com/konstantin/booking-backend/internal/server"
 	"github.com/konstantin/booking-backend/internal/storage"
+	"github.com/konstantin/booking-backend/internal/web"
 )
 
 func main() {
@@ -23,11 +24,16 @@ func main() {
 		port = "8080"
 	}
 
+	if os.Getenv("GIN_MODE") == "" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	store := storage.New()
 	srv := server.New(store, func() time.Time { return time.Now().UTC() })
 
 	r := gin.Default()
 	api.RegisterHandlers(r, api.NewStrictHandler(srv, nil))
+	web.Register(r)
 
 	httpSrv := &http.Server{
 		Addr:    ":" + port,

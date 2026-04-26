@@ -1,6 +1,8 @@
 node_modules/
 tsp-output/
 backend/internal/api/*.gen.go
+backend/internal/web/dist/*
+!backend/internal/web/dist/index.html
 .DS_Store
 test-results/
 playwright-report/
