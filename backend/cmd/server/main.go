@@ -29,6 +29,12 @@ func main() {
 	}
 
 	store := storage.New()
+	if os.Getenv("SEED_DEFAULTS") == "true" {
+		store.CreateEventType(storage.EventType{
+			Name:            "Созвон",
+			DurationMinutes: 30,
+		})
+	}
 	srv := server.New(store, func() time.Time { return time.Now().UTC() })
 
 	r := gin.Default()

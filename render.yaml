@@ -11,3 +11,5 @@ services:
     envVars:
       - key: GIN_MODE
         value: release
+      - key: SEED_DEFAULTS
+        value: "true"
