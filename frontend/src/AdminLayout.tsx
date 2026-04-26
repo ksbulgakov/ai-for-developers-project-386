@@ -15,18 +15,28 @@ function AdminLayout() {
   return (
     <AppShell header={{ height: 60 }} padding="md">
       <AppShell.Header px="md">
-        <Group h="100%" gap="xs" wrap="nowrap">
-          {links.map((link) => (
-            <NavLink
-              key={link.to}
-              component={Link}
-              to={link.to}
-              w="auto"
-              label={isCompact ? link.icon : link.label}
-              aria-label={link.label}
-              active={pathname === link.to || pathname.startsWith(`${link.to}/`)}
-            />
-          ))}
+        <Group h="100%" gap="xs" wrap="nowrap" justify="center">
+          {links.map((link) => {
+            const isActive =
+              pathname === link.to || pathname.startsWith(`${link.to}/`)
+            return (
+              <NavLink
+                key={link.to}
+                component={Link}
+                to={link.to}
+                w="auto"
+                variant="subtle"
+                label={isCompact ? link.icon : link.label}
+                aria-label={link.label}
+                active={isActive}
+                styles={{
+                  label: isActive
+                    ? { color: 'var(--mantine-color-blue-4)' }
+                    : undefined,
+                }}
+              />
+            )
+          })}
         </Group>
       </AppShell.Header>
       <AppShell.Main>
